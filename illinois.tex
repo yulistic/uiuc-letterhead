@@ -1,4 +1,14 @@
 % https://tex.stackexchange.com/questions/59932/reproducing-an-official-letterhead
+%
+% Header and footer follow the official stationery sample
+% (https://brand.illinois.edu/applying-the-brand/stationery): the unit block
+% in the header is Source Sans (unit name bold, address regular, UIblue); the
+% footer's "UNIVERSITY OF ILLINOIS URBANA-CHAMPAIGN" is Montserrat bold caps
+% in UIorange and the contact line below it is Source Sans in UIblue. Both
+% typefaces are in TeX Live (montserrat, sourcesanspro).
+%
+% The body is set in Source Sans, the brand's body typeface. For a serif body
+% replace the "Body font" block below with, e.g., \usepackage{newtxtext}.
 
 %% Colors
 % https://www.creativeservices.illinois.edu/brand/logos-and-colors.html
@@ -9,7 +19,9 @@
 \definecolor{UIorange}{RGB}{232,74,39}
 
 % set page geometry
-\usepackage[top=1.75in,left=1.0in,bottom=0.33in,right=1.0in]{geometry}
+% top: the header block ends at about 1.65in; bottom: the footer block starts
+% at 9.94in from the top, so the body must stop above 9.8in.
+\usepackage[top=1.95in,left=1.0in,bottom=1.2in,right=1.0in]{geometry}
 \usepackage{graphicx}
 
 % logo
@@ -26,10 +38,16 @@
 % for conditionals
 \usepackage{ifthen}
 
-% load Montserrat font -- this is a close alternative to Gotham
-\usepackage[defaultfam,light,semibold,oldstyle]{montserrat} %% Option 'defaultfam'
-%% only if the base font of the document is to be sans serif
 \usepackage[T1]{fontenc}
+
+% Body font
+\usepackage[default,lining]{sourcesanspro}
+
+% Letterhead typefaces, selected by family name in the header and footer so
+% that they do not depend on the body font.
+\usepackage{montserrat}
+\newcommand*{\lhMontserrat}{\fontfamily{Montserrat-TLF}\selectfont}
+\newcommand*{\lhSourceSans}{\fontfamily{SourceSansPro-TLF}\selectfont}
 
 % set linespacing and paragraph spacing
 \linespread{1.10}
@@ -52,29 +70,16 @@
       \includegraphics[height=0.3125in]{\logofile}
     \end{textblock*}
 
-    % Inset department address
-    \begin{textblock*}{4.0in} (3.0in,0.45in)
+    % Inset department address, right-aligned to the body's right margin
+    % (paper width 8.5in - right margin 1.0in = 7.5in)
+    \begin{textblock*}{4.0in} (3.5in,0.45in)
       \begin{flushright}
-        {%
-	\color{UIblue}
-	\fontsize{11}{14}
-	%\fontseries{b}
-	\textbf
-	\fromcollege\\%
-	}
-	\vspace{2mm}
-	{%
-        \color{UIblue}
-	\small
-        \fromdept\\%
-        \fromdeptaddress%
-        }
+        \lhSourceSans\color{UIblue}%
+        {\fontsize{10}{12}\fontseries{b}\selectfont \fromcollege\par}
+        \vspace{1mm}
+        {\fontsize{9}{11}\selectfont \fromdept\\\fromdeptaddress\par}
       \end{flushright}
     \end{textblock*}
-
-    % main text
-    %\newgeometry{top=3.0in,left=0.75in,bottom=1.2in,right=1.0in}
-    \vspace*{-1in}
   }
 
 \usepackage{fancyhdr}
@@ -86,22 +91,13 @@
     % footer
     % specify the top right corner location of the footer
     \begin{textblock*}{\textwidth}[1.0,0.0](7.5in,9.9375in)
-        {%
-         \begin{flushleft}
-         \color{UIorange}
-         \fontseries{mb}\selectfont
-         \small
-         UNIVERSITY OF ILLINOIS URBANA--CHAMPAIGN
-         \end{flushleft}
-        }
-        \vspace{-6mm}
-        {%
-         \begin{flushleft}
-         \color{UIblue}
-         \fontsize{9}{11}\selectfont
-         \fromtel\ \textbullet\ \fromweb%
-         \end{flushleft}
-        }
+        \begin{flushleft}
+        {\lhMontserrat\fontsize{9.5}{12}\fontseries{b}\selectfont\color{UIorange}%
+         UNIVERSITY OF ILLINOIS URBANA-CHAMPAIGN\par}
+        \vspace{0.5mm}
+        {\lhSourceSans\fontsize{9}{11}\selectfont\color{UIblue}%
+         \fromtel\ \textbullet\ \fromweb\par}
+        \end{flushleft}
     \end{textblock*}
     }
 
